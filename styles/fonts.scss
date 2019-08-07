@@ -2,8 +2,8 @@
 
 
 @font-face {
-  font-family: AbrilFatFace;
-  src: url('/static/fonts/Abril_Fatface/AbrilFatface-Regular.ttf')
+  font-family: RighteousRegular;
+  src: url('/static/fonts/Righteous/Righteous-Regular.ttf')
 }
 
 @font-face {
@@ -12,14 +12,14 @@
 }
 
 .dp-title {
-	font-family: 'BebasNeueLight', "Arial Black", Courier, monospace;
+	font-family: 'RighteousRegular', "Arial Black", Courier, monospace;
 	@media #{$desktop}, #{$tablet} {
 		font-size: 10.2rem;
 		letter-spacing: .3rem;
 	}
 
 	@media #{$mobile} {
-		font-size: 5.5rem;
+		font-size: 6.0rem;
 		letter-spacing: .100rem;
 	}
 }
@@ -27,12 +27,23 @@
 .dp-subtitle {
 	font-family: 'Raleway-Regular', "Arial", Courier, monospace;
 	@media #{$desktop}, #{$tablet} {
-		font-size: 5.2rem;
-		letter-spacing: .2rem;
+		font-size: 4.5rem;
+		letter-spacing: .1rem;
 	}
 
 	@media #{$mobile} {
-		font-size: 4.0rem;
-		letter-spacing: .100rem;
+		font-size: 2.0rem;
+	}
+}
+
+.dp-supporting-text {
+	font-family: 'Raleway-Regular', "Arial", Courier, monospace;
+	@media #{$desktop}, #{$tablet} {
+		font-size: 2.8rem;
+		letter-spacing: .1rem;
+	}
+
+	@media #{$mobile} {
+		font-size: 1.5rem;
 	}
 }

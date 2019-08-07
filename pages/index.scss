@@ -5,9 +5,10 @@
     font-family: 'Arial';
 }
 
-h1, h2 {
+h1, h2, div, section {
 	margin: 0;
 	padding: 0;
+	box-sizing: border-box;
 }
 
 html {
@@ -15,49 +16,51 @@ html {
 }
 
 
+
 .Home {
 	height: 100vh;
-	width: 100vw;
 	background-image: url('/static/home1-tiny.jpg');
 	background-repeat: no-repeat;
 	background-size: cover;
 	background-position: 100% 0%;
+}
+
+.Home__overlay {
+	height: 100%;
 	width: 100%;
+	transition: all 3.0s;
+	transition-delay: 0.5s;
 	display: flex;
-
-	@media #{$desktop}, #{$tablet} {
-		justify-content: flex-end;
-	}
-
-	@media #{$mobile} {
-		justify-content: center;
-	}
+	flex-direction: column;
+	justify-content: space-between;
 }
 
 .Home__intro {
 	width: 100%;
-	background-color: rgb(62,52,82);
-	opacity: 0.85;
-	padding: 30px;
+
+	transition: opacity 2.5s;
 
 	@media #{$desktop}, #{$tablet} {
 		text-align: right;
+		padding: 30px;
 	}
 
 	@media #{$mobile} {
 		text-align: center;
+		padding: 10px;
+		margin-top: 40px;
 	}
-
 }
 
-.Home__title {
+.Home__intro .Home__title {
 	color: rgb(158,202,1);
-	margin-top:20px;
-	margin-right:20px;
-
+	transition: opacity 5.0s;
+	transition-delay: 2.0s;
 }
 
-.Home__subtitle {
+.Home__intro .Home__subtitle {
+	transition: opacity 5.0s;
+	transition-delay: 3.5s;
 	color: rgb(213,203,235);
 	@media #{$desktop} {
 		margin-left: 30%;
@@ -66,4 +69,33 @@ html {
 	@media #{$tablet} {
 		margin-left: 10%;
 	}
+}
+
+.Home__blurb {
+	color: rgb(213,203,235);
+	margin: 50px 30px;
+
+	transition: opacity 5.0s;
+	transition-delay: 4.5s;
+}
+
+/* Animations */
+
+.Home--start .Home__overlay {
+	background-color: transparent;
+	opacity: 0;
+}
+
+.Home--end .Home__overlay {
+	opacity: 0.85;
+	background-color: rgb(62,52,82);
+}
+
+
+.Home--start .Home__title, .Home--start .Home__subtitle, .Home--start .Home__blurb {
+	opacity: 0;
+}
+
+.Home--end .Home__title, .Home--end .Home__subtitle, .Home--end .Home--blurb {
+	opacity: 1;
 }
