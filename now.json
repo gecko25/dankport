@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "alias": "dankport.com",
+  "builds": [
+    {
+      "src": "next.config.js",
+      "use": "@now/next"
+    }
+  ],
+  "public": false
+}

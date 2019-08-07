@@ -1,0 +1,69 @@
+@import '../styles/fonts.scss';
+@import '../styles/variables.scss';
+
+* {
+    font-family: 'Arial';
+}
+
+h1, h2 {
+	margin: 0;
+	padding: 0;
+}
+
+html {
+  font-size: 10px;
+}
+
+
+.Home {
+	height: 100vh;
+	width: 100vw;
+	background-image: url('/static/home1-tiny.jpg');
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: 100% 0%;
+	width: 100%;
+	display: flex;
+
+	@media #{$desktop}, #{$tablet} {
+		justify-content: flex-end;
+	}
+
+	@media #{$mobile} {
+		justify-content: center;
+	}
+}
+
+.Home__intro {
+	width: 100%;
+	background-color: rgb(62,52,82);
+	opacity: 0.85;
+	padding: 30px;
+
+	@media #{$desktop}, #{$tablet} {
+		text-align: right;
+	}
+
+	@media #{$mobile} {
+		text-align: center;
+	}
+
+}
+
+.Home__title {
+	color: rgb(158,202,1);
+	margin-top:20px;
+	margin-right:20px;
+
+}
+
+.Home__subtitle {
+	color: rgb(213,203,235);
+	@media #{$desktop} {
+		margin-left: 30%;
+	}
+
+	@media #{$tablet} {
+		margin-left: 10%;
+	}
+}

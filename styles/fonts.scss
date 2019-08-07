@@ -1,0 +1,38 @@
+@import './variables.scss';
+
+
+@font-face {
+  font-family: AbrilFatFace;
+  src: url('/static/fonts/Abril_Fatface/AbrilFatface-Regular.ttf')
+}
+
+@font-face {
+  font-family: Raleway-Regular;
+  src: url('/static/fonts/Raleway/Raleway-Regular.ttf')
+}
+
+.dp-title {
+	font-family: 'BebasNeueLight', "Arial Black", Courier, monospace;
+	@media #{$desktop}, #{$tablet} {
+		font-size: 10.2rem;
+		letter-spacing: .3rem;
+	}
+
+	@media #{$mobile} {
+		font-size: 5.5rem;
+		letter-spacing: .100rem;
+	}
+}
+
+.dp-subtitle {
+	font-family: 'Raleway-Regular', "Arial", Courier, monospace;
+	@media #{$desktop}, #{$tablet} {
+		font-size: 5.2rem;
+		letter-spacing: .2rem;
+	}
+
+	@media #{$mobile} {
+		font-size: 4.0rem;
+		letter-spacing: .100rem;
+	}
+}
