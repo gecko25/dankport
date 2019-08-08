@@ -24,6 +24,18 @@
 	}
 }
 
+.dp-product-title {
+	font-family: 'RighteousRegular', "Arial Black", Courier, monospace;
+	@media #{$desktop}, #{$tablet} {
+		font-size: 4.5rem;
+		letter-spacing: .1rem;
+	}
+
+	@media #{$mobile} {
+		font-size: 3.5rem;
+	}
+}
+
 .dp-subtitle {
 	font-family: 'Raleway-Regular', "Arial", Courier, monospace;
 	@media #{$desktop}, #{$tablet} {
@@ -58,5 +70,18 @@
 
 	@media #{$mobile} {
 		font-size: 0.8rem;
+	}
+}
+
+
+.dp-paragraph {
+	font-family: 'Raleway-Regular', "Arial", Courier, monospace;
+	@media #{$desktop}, #{$tablet} {
+		font-size: 1.8rem;
+		letter-spacing: .1rem;
+	}
+
+	@media #{$mobile} {
+		font-size: 1.5rem;
 	}
 }

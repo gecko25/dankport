@@ -26,9 +26,9 @@ const Home = () => {
 					<Link
 						href="/shop"
 					>
-						<button className="Button dp-supporting-text">
+						<a className="Button dp-supporting-text">
 							Enter
-						</button>
+						</a>
 					</Link>
 
 					<div className="Home__blurb dp-footnote">Currently under construction</div>

@@ -31,6 +31,11 @@ const Head = props => (
     <meta property="og:image" content={props.ogImage || defaultOGImage} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
+
+
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+		<script src="https://cdn.snipcart.com/scripts/2.0/snipcart.js" id="snipcart" data-api-key="NjkzOTQwMDMtNjkyMy00MDFjLWI4ZDgtMmNjZWI2NDA4N2Y2NjM3MDA4MzUyODY4NTg0Mjc5"></script>
+		<link href="https://cdn.snipcart.com/themes/2.0/base/snipcart.min.css" type="text/css" rel="stylesheet" />
   </NextHead>
 )
 

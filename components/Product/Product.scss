@@ -1,0 +1,46 @@
+@import '../../styles/global.scss';
+
+.Product {
+	margin-bottom: 50px;
+}
+
+.Product__title {
+	text-align: center;
+}
+
+.Product__image-container {
+	text-align: center;
+}
+
+.Product__image {
+	width: 300px;
+}
+
+.Product__product-container {
+	display: flex;
+	align-items: center;
+	@media #{$mobile} {
+		flex-direction: column;
+		text-align: center;
+	}
+}
+
+.Product__description {
+	@media #{$desktop}, #{$tablet} {
+		padding-right: 50px;
+	}
+
+	@media #{$mobile} {
+		padding-right: 20px;
+		padding-left: 20px;
+	}
+}
+
+.Product__price-button-container {
+	text-align: center;
+	button {
+		color: rgb(25,111,66);
+		border: $dank-green solid 1px;
+	}
+
+}

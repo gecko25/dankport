@@ -18,3 +18,16 @@ html {
 
 @import '../styles/fonts.scss';
 @import '../styles/variables.scss';
+
+
+/* Global components */
+.Button {
+	background-color: transparent;
+	padding: 20px;
+	color: $dank-green;
+	border: $white-haze 1px solid;
+	text-align: center;
+	margin: auto;
+	min-width: 200px;
+	text-decoration: none;
+}
