@@ -1,0 +1,24 @@
+@import '../../styles/global.scss';
+
+.Nav {
+	background-color: white;
+	border-bottom: 1px $dank-purple solid;
+	margin-bottom: 15px;
+}
+
+
+.Nav ul {
+	display: flex;
+	justify-content: flex-start;
+	padding: 0;
+}
+
+.Nav li {
+	display: flex;
+	padding: 6px 8px;
+}
+
+.Nav a {
+	color: $dank-purple;
+	text-decoration: none;
+}

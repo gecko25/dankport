@@ -1,21 +1,4 @@
-@import '../styles/fonts.scss';
-@import '../styles/variables.scss';
-
-* {
-    font-family: 'Arial';
-}
-
-h1, h2, div, section {
-	margin: 0;
-	padding: 0;
-	box-sizing: border-box;
-}
-
-html {
-  font-size: 10px;
-}
-
-
+@import '../styles/global.scss';
 
 .Home {
 	height: 100vh;
@@ -37,7 +20,6 @@ html {
 
 .Home__intro {
 	width: 100%;
-
 	transition: opacity 2.5s;
 
 	@media #{$desktop}, #{$tablet} {
@@ -53,7 +35,7 @@ html {
 }
 
 .Home__intro .Home__title {
-	color: rgb(158,202,1);
+	color: $dank-green;
 	transition: opacity 5.0s;
 	transition-delay: 2.0s;
 }
@@ -61,7 +43,7 @@ html {
 .Home__intro .Home__subtitle {
 	transition: opacity 5.0s;
 	transition-delay: 3.5s;
-	color: rgb(213,203,235);
+	color: $white-haze;
 	@media #{$desktop} {
 		margin-left: 30%;
 	}
@@ -72,9 +54,8 @@ html {
 }
 
 .Home__blurb {
-	color: rgb(213,203,235);
+	color: $white-haze;
 	margin: 50px 30px;
-
 	transition: opacity 5.0s;
 	transition-delay: 4.5s;
 }
@@ -88,7 +69,7 @@ html {
 
 .Home--end .Home__overlay {
 	opacity: 0.85;
-	background-color: rgb(62,52,82);
+	background-color: $dank-purple;
 }
 
 
@@ -98,4 +79,16 @@ html {
 
 .Home--end .Home__title, .Home--end .Home__subtitle, .Home--end .Home--blurb {
 	opacity: 1;
+}
+
+
+/* Global components */
+.Button {
+	background-color: transparent;
+	padding: 20px;
+	color: $dank-green;
+	border: $white-haze 1px solid;
+	text-align: center;
+	margin: auto;
+	min-width: 200px;
 }

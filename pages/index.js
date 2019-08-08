@@ -1,7 +1,6 @@
 import React from 'react'
 import Link from 'next/link'
 import Head from '../components/head'
-// import Nav from '../components/nav'
 import { useState } from 'react';
 import './index.scss';
 
@@ -24,7 +23,15 @@ const Home = () => {
 						<h2 className="Home__subtitle dp-subtitle">The shopping portal for all your herbal needs.</h2>
 					</div>
 
-					<div className="Home__blurb dp-supporting-text">Currently under construction</div>
+					<Link
+						href="/shop"
+					>
+						<button className="Button dp-supporting-text">
+							Enter
+						</button>
+					</Link>
+
+					<div className="Home__blurb dp-footnote">Currently under construction</div>
 				</div>
 			</section>
 

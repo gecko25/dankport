@@ -47,3 +47,16 @@
 		font-size: 1.5rem;
 	}
 }
+
+
+.dp-footnote {
+	font-family: 'Raleway-Regular', "Arial", Courier, monospace;
+	@media #{$desktop}, #{$tablet} {
+		font-size: 1.8rem;
+		letter-spacing: .1rem;
+	}
+
+	@media #{$mobile} {
+		font-size: 0.8rem;
+	}
+}
