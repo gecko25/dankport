@@ -23,13 +23,9 @@ const Home = () => {
 						<h2 className="Home__subtitle dp-subtitle">The shopping portal for all your herbal needs.</h2>
 					</div>
 
-					<Link
-						href="/shop"
-					>
-						<a className="Button dp-supporting-text">
-							Enter
-						</a>
-					</Link>
+					<a href="/shop" className="Button dp-supporting-text">
+						Enter
+					</a>
 
 					<div className="Home__blurb dp-footnote">Currently under construction</div>
 				</div>

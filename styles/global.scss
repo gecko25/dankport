@@ -8,6 +8,14 @@ h1, h2, div, section, button {
 	box-sizing: border-box;
 }
 
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
 button {
 	cursor: pointer;
 }
