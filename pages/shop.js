@@ -3,6 +3,8 @@ import Link from 'next/link'
 import Head from '../components/head'
 import { Nav, Product } from '../components/'
 import './index.scss';
+import '../styles/snip-override.scss';
+
 
 const Shop = ({ products }) => {
 	return (

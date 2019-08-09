@@ -7,8 +7,15 @@
 }
 
 @font-face {
+  font-family: Raleway-SemiBold;
+  src: url('/static/fonts/Raleway/Raleway-SemiBold.ttf');
+	font-weight: 400px;
+}
+
+@font-face {
   font-family: Raleway-Regular;
-  src: url('/static/fonts/Raleway/Raleway-Regular.ttf')
+  src: url('/static/fonts/Raleway/Raleway-Regular.ttf');
+	font-weight: 400px;
 }
 
 .dp-title {

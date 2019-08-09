@@ -1,0 +1,41 @@
+@import './variables.scss';
+
+.snip-layout.snip-active {
+	padding-top: 100px;
+}
+
+.snip-layout-cart-content {
+	background: #fff;
+	margin: 0 auto;
+	width: 90%;
+	position: relative;
+}
+
+
+.snip-layout .snip-layout__close {
+
+
+	@media #{$desktop}, #{$tablet} {
+		top: .5em;
+		right: .65em;
+	}
+
+	@media #{$mobile} {
+		top: .45em;
+		right: .15em;
+	}
+}
+.snip-layout__close .snip-ico.snip-ico--close {
+	font-family: 'Raleway-SemiBold', "Arial Black", Courier, monospace;
+	@media #{$desktop}, #{$tablet} {
+		font-size: 1.85rem;
+	}
+
+	@media #{$mobile} {
+		font-size: 1.4rem;
+	}
+}
+
+.snip-layout__close .snip-ico.snip-ico--close::before {
+		content: 'Continue shopping \2192';
+}

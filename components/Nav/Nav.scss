@@ -1,6 +1,9 @@
 @import '../../styles/global.scss';
 
 .Nav {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
 	background-color: white;
 	border-bottom: 1px $dank-purple solid;
 	margin-bottom: 15px;
@@ -21,4 +24,11 @@
 .Nav a {
 	color: $dank-purple;
 	text-decoration: none;
+}
+
+.Nav__CartIcon {
+	margin-right: 10px;
+}
+.Nav__CartIcon path {
+	fill: $dank-purple
 }
