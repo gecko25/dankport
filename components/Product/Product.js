@@ -27,7 +27,9 @@ const Product = ({
           data-item-name={product.name}
           data-item-price={product.price}
           data-item-url={router.pathname}
-          data-item-image={product.image}>
+          data-item-image={product.image}
+					data-item-weight={100}
+				>
           Add to cart
         </button>
       </div>

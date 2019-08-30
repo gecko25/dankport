@@ -1,11 +1,40 @@
 {
   "version": 2,
   "alias": "dankport.com",
+	"env": {
+		"SNIPCART_API_KEY_TEST": "@songkick-api-key-test",
+		"SNIPCART_API_KEY_PROD": "@songkick-api-key-prod"
+	},
   "builds": [
+		{
+			"src": "server/api/orders.js",
+			"use": "@now/node"
+		},
+		{
+			"src": "server/api/hook.js",
+			"use": "@now/node"
+		},
     {
       "src": "next.config.js",
       "use": "@now/next"
     }
   ],
+	"routes": [
+		{
+			"src": "/api/orders/(?<supplier_id>[^/]+)",
+			"methods": ["GET"],
+			"dest": "/server/api/orders?supplier_id=$supplier_id"
+		},
+		{
+			"src": "/api/orders",
+			"methods": ["GET"],
+			"dest": "server/api/orders.js"
+		},
+		{
+			"src": "/api/hook",
+			"methods": ["POST"],
+			"dest": "server/api/hook.js"
+		}
+	],
   "public": false
 }

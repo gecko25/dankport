@@ -20,6 +20,10 @@ html {
   font-size: 10px;
 }
 
+ul {
+	list-style: none;
+}
+
 @import '../styles/fonts.scss';
 @import '../styles/variables.scss';
 
