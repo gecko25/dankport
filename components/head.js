@@ -36,6 +36,15 @@ const Head = props => (
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
 		<script src="https://cdn.snipcart.com/scripts/2.0/snipcart.js" id="snipcart" data-api-key="NjkzOTQwMDMtNjkyMy00MDFjLWI4ZDgtMmNjZWI2NDA4N2Y2NjM3MDA4MzUyODY4NTg0Mjc5"></script>
 		<link href="https://cdn.snipcart.com/themes/2.0/base/snipcart.min.css" type="text/css" rel="stylesheet" />
+
+		{/* React bootstrap (Modals, Buttons) */}
+		<link
+		  rel="stylesheet"
+		  href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+		  integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+		  crossorigin="anonymous"
+		/>
+
   </NextHead>
 )
 

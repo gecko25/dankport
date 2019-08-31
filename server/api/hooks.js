@@ -1,5 +1,8 @@
-const { logger } = require('../config');
-
+const base64 = require('base-64');
+const axios = require('axios');
+const config = require('../config');
+const database = require('../mock-database');
+const { logger, env } = config;
 /*
  * This module is solely responsible for sending out emails.
  *
@@ -16,34 +19,65 @@ const { logger } = require('../config');
  * We, then, tell snipcart to send the tracking number email. (https://docs.snipcart.com/api-reference/orders#put-orders-token)
  */
 
-module.exports = (req, res) => {
+module.exports = async (req, res) => {
 		let success = false;
 		let status = 200;
 		logger.info(req.headers['X-Snipcart-RequestToken']);
 		// validate this token
 		// https://app.snipcart.com/api/requestvalidation/{token}
 
-		const event = req.body.eventName;
-		logger.info(`Registering hook event: ${event}`);
+		const eventName = req.body.eventName;
+		const { token, metadata } = req.body.content;
 
-		switch(event) {
+		logger.info(`Registering hook event: ${eventName}`);
+		logger.info(`Registering token event: ${token}`);
+
+		switch(eventName) {
 			// Notification to send customer (Order Received)
+			// We have just received and order.
+			// An confirmation email is automatically sent to the customer
+			// We need to send an email to the suppler
 		  case "order.completed":
 		    logger.info('--- ORDER COMPLETED ---');
 				success = true;
+
+				// Todo: send out email programmatically here.
+				// Snipcart will not handle communication with suppliers, just our customers.
+				const supplierEmail = database.suppliers[metadata.supplier_id];
+
 		    break;
 
-			// Notification to send supplier (Order Received)
-		  case "order.status.changed":
-				logger.info('--- ORDER STATUS CHANGED ---');
-				success = true;
-		    // code block
-		    break;
-
-			// Notification to send customer the tracking number (Order shipped)
+			// The tracking number was changed.
+			// Send customer the tracking number (Order shipped)
 			case "order.trackingNumber.changed":
 				logger.info('--- TRACKING NUMBER UPDATED ---');
 				success = true;
+
+				try {
+					const response = await axios.post(`https://app.snipcart.com/api/orders/${token}/notifications`, {
+						headers: { 'Authorization': `Basic ${encodedString}` },
+						data: {
+							"message":"This is a test",
+							"type":"TrackingNumber",
+							"deliveryMethod":"Email"
+						}
+					});
+
+					logger.info("Successfully sent tracking number email", response.data)
+					res.status(200).json({
+						"success": true,
+						"data": response.data,
+					});
+				} catch (error) {
+
+					logger.error(`Error getting tracking number email:`, error);
+
+					res.status(400).json({
+						"success": false,
+						"data": {},
+					});
+				}
+
 				break;
 
 			case "customauth:customer_updated":

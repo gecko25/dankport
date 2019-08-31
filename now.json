@@ -2,8 +2,8 @@
   "version": 2,
   "alias": "dankport.com",
 	"env": {
-		"SNIPCART_API_KEY_TEST": "@songkick-api-key-test",
-		"SNIPCART_API_KEY_PROD": "@songkick-api-key-prod"
+		"SNIPCART_API_KEY_TEST": "@snipcart-api-key-test",
+		"SNIPCART_API_KEY_PROD": "@snipcart-api-key-prod"
 	},
   "builds": [
 		{
@@ -11,7 +11,7 @@
 			"use": "@now/node"
 		},
 		{
-			"src": "server/api/hook.js",
+			"src": "server/api/hooks.js",
 			"use": "@now/node"
 		},
     {
@@ -33,7 +33,7 @@
 		{
 			"src": "/api/hook",
 			"methods": ["POST"],
-			"dest": "server/api/hook.js"
+			"dest": "server/api/hooks.js"
 		}
 	],
   "public": false

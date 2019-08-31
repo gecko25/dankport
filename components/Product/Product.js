@@ -28,6 +28,11 @@ const Product = ({
           data-item-price={product.price}
           data-item-url={router.pathname}
           data-item-image={product.image}
+					data-item-metadata={`'${JSON.stringify(
+						{
+							supplier_id: product.supplierId
+						}
+					)}'`}
 					data-item-weight={100}
 				>
           Add to cart
