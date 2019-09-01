@@ -1,13 +1,21 @@
 import React from 'react'
-import { useState } from 'react';
 import moment from 'moment';
-import { Head } from '../../../components';
+import axios from 'axios';
+import { useState } from 'react';
+import { useRouter } from 'next/router'
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 
-import { useRouter } from 'next/router'
-import axios from 'axios';
+/** Universial components */
+import { Head } from '../../../components';
+
+/** Page specific components */
+import TrackingUrlForm from './components/TrackingUrlForm'
+
+/** Helpers **/
 import { logger, absoluteUrl } from '../../../utils';
+
+/** Styles **/
 import './supplier.scss';
 
 
@@ -24,7 +32,6 @@ const Supplier = ({
 	const [show, setShow] = useState(false);
 	const handleClose = () => setShow(false);
 	const handleShow = () => setShow(true);
-
 	const openModal = (order) => {
 		setOrder(order);
 		handleShow();
@@ -36,7 +43,6 @@ const Supplier = ({
 			<div>Welcome, {firstName} {id}</div>
 			<p>Please track and update your orders here.</p>
 
-
 			<ul className="Row">
 				<li className="Column One">Date</li>
 				<li className="Column Two">Status</li>
@@ -45,7 +51,7 @@ const Supplier = ({
 				<li className="Column Five">Tracking Information</li>
 			</ul>
 
-			{
+			{/* use react table */
 				orders.map(order => (
 					<ul className="Row" key={order.invoiceNumber}>
 						<li className="Column One">{moment(order.completionDate).format('ll')}</li>
@@ -71,8 +77,7 @@ const Supplier = ({
 			<Modal show={show} onHide={handleClose}>
 				<Modal.Header closeButton>
 					<Modal.Title>
-						Please add the tracking information so we can notify {order.user.shippingAddressName}
-						they can expect their package soon!
+						Add tracking information
 					</Modal.Title>
 				</Modal.Header>
 				<Modal.Body>
@@ -84,24 +89,15 @@ const Supplier = ({
 						<div>{order.shippingAddress.address2}</div>
 						<div>{order.shippingAddress.city}, {order.shippingAddress.province ? order.shippingAddress.province : ''} {order.shippingAddress.postalCode}</div>
 						<div>{order.shippingAddress.country}</div>
-
 					</div>
 
-					<form>
-						Tracking number: <input type="text" name="tracking_number" />
-						Shipping carrier: <input type="text" name="shipping_carrier" />
-						Tracking url: <input type="text" name="tracking_url" />
-					</form>
+					<TrackingUrlForm />
 
-				</Modal.Body>
-				<Modal.Footer>
 					<Button variant="secondary" onClick={handleClose}>
 						Close
 					</Button>
-					<Button variant="primary" onClick={handleClose}>
-						Save Changes
-					</Button>
-				</Modal.Footer>
+					
+				</Modal.Body>
 			</Modal>
 
 		</div>
