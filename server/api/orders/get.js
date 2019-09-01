@@ -1,6 +1,6 @@
 const base64 = require('base-64');
 const axios = require('axios');
-const config = require('../config');
+const config = require('../../config');
 const { logger, env } = config;
 
 const getOrders = async function getOrders(req, res) {
@@ -15,7 +15,7 @@ const getOrders = async function getOrders(req, res) {
 			headers: { 'Authorization': `Basic ${encodedString}` },
 		});
 
-		logger.info('Successfuly received orders', response.data);
+		logger.info('Successfuly received orders');
 
 		res.status(200).json({
 			"success": true,

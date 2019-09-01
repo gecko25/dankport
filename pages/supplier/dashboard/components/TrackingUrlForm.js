@@ -1,15 +1,14 @@
+import axios from 'axios';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
-import { Input } from '../../../../components';
 import * as Yup from 'yup';
 
+/** Helpers **/
+import { logger, absoluteUrl } from '../../../../utils';
 
-const formValues = {
-	tracking_number: '',
-	shipping_carrier: '',
-	tracking_url: '',
-}
+/** Universial components */
+import { Input } from '../../../../components';
 
 const ValidationSchema = Yup.object().shape({
   tracking_number: Yup.string()
@@ -20,15 +19,29 @@ const ValidationSchema = Yup.object().shape({
     .required('Required'),
 });
 
-const onSubmit = (values, actions) => {
-	console.error('submitting values..', values);
-	actions.setSubmitting(false);
-	// handleClose();
+const onSubmit = async (values, actions) => {
+	try {
+		logger.info('Submitting values..', values);
+		const response = await axios.put(`/api/orders`, {
+			...values,
+		});
+		logger.info(response);
+		actions.setSubmitting(false);
+	} catch (error) {
+		logger.error(error);
+		actions.setSubmitting(false);
+	}
+
 }
 
-const TrackingUrlForm = () => (
+const TrackingUrlForm = ({ token }) => (
 	<Formik
-		initialValues={formValues}
+		initialValues={{
+			token,
+			tracking_number: '784161861250',
+			shipping_carrier: 'Fed ex',
+			tracking_url: 'https://www.fedex.com/apps/fedextrack/?action=track&tracknumbers=784161861250&language=en&opco=FDEG&clientype=ivother',
+		}}
 		validationSchema={ValidationSchema}
 		onSubmit={onSubmit}
 		render={({ errors, status, touched, isSubmitting }) => (
@@ -54,6 +67,10 @@ const TrackingUrlForm = () => (
 					name="tracking_url"
 					placeholder="https://www.fedex.com/apps/fedextrack/?action=track&tracknumbers=784161861250&language=en&opco=FDEG&clientype=ivother"
 					label="Tracking url"
+				/>
+				<Field
+					type="hidden"
+					name="token"
 				/>
 				<Button
 					type="submit"

@@ -7,7 +7,11 @@
 	},
   "builds": [
 		{
-			"src": "server/api/orders.js",
+			"src": "server/api/orders/get.js",
+			"use": "@now/node"
+		},
+		{
+			"src": "server/api/orders/put.js",
 			"use": "@now/node"
 		},
 		{
@@ -28,7 +32,12 @@
 		{
 			"src": "/api/orders",
 			"methods": ["GET"],
-			"dest": "server/api/orders.js"
+			"dest": "server/api/orders/get.js"
+		},
+		{
+			"src": "/api/orders",
+			"methods": ["PUT"],
+			"dest": "server/api/orders/put.js"
 		},
 		{
 			"src": "/api/hook",

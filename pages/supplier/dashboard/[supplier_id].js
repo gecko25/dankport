@@ -60,13 +60,18 @@ const Supplier = ({
 						<li className="Column Four">{order.token}</li>
 						<li className="Column Five">
 							{
-								order.tracking_number ?
-									<span>{order.tracking_number}</span>
+								order.trackingNumber ?
+									<Button
+										variant="secondary"
+										onClick={openModal.bind(null, order)}>
+											View tracking information
+									</Button>
 									:
 									<Button
 										className=""
 										variant="primary"
-										onClick={openModal.bind(null, order)}>Add tracking information
+										onClick={openModal.bind(null, order)}>
+											Add tracking information
 									</Button>
 							}
 						</li>
@@ -77,26 +82,41 @@ const Supplier = ({
 			<Modal show={show} onHide={handleClose}>
 				<Modal.Header closeButton>
 					<Modal.Title>
-						Add tracking information
+						Tracking Information
 					</Modal.Title>
 				</Modal.Header>
 				<Modal.Body>
+					{
+						order.trackingNumber &&
+						<div>
+							<div>Tracking number: {order.trackingNumber}</div>
+							<div>Tracking url: {order.trackingUrl}</div>
+							<div>Shipping carrier: {order.metadata.shippingCarrier}</div>
+						</div>
+					}
+
 					<div>
-						Please confirm the shipping information:
+						Shipping information:
 						<div>{order.shippingAddress.fullName}</div>
 						<div>{order.shippingAddress.company}</div>
 						<div>{order.shippingAddress.address1}</div>
 						<div>{order.shippingAddress.address2}</div>
 						<div>{order.shippingAddress.city}, {order.shippingAddress.province ? order.shippingAddress.province : ''} {order.shippingAddress.postalCode}</div>
 						<div>{order.shippingAddress.country}</div>
-					</div>
 
-					<TrackingUrlForm />
+						<div>{order.user.email}</div>
+
+
+						{
+							!order.trackingNumber &&
+								<TrackingUrlForm token={order.token} />
+						}
+					</div>
 
 					<Button variant="secondary" onClick={handleClose}>
 						Close
 					</Button>
-					
+
 				</Modal.Body>
 			</Modal>
 
