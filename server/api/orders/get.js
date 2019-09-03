@@ -1,28 +1,53 @@
-const base64 = require('base-64');
-const axios = require('axios');
+const snipcart = require('../snipcart');
 const config = require('../../config');
-const { logger, env } = config;
+const { logger, transporter } = config;
 
 const getOrders = async function getOrders(req, res) {
-	const { SNIPCART_API_KEY } = env;
-	const encodedString = base64.encode(`${SNIPCART_API_KEY}`);
-
-	logger.info(`Going to get supplier information for supplier: |${req.query.supplier_id}| (encoded: |${encodedString}|)`);
-
+	logger.info(`Going to get supplier information for supplier: |${req.query.supplier_id}`);
+	const requestedSupplierId = req.query.supplier_id;
 
 	try {
-		const response = await axios.get('https://app.snipcart.com/api/orders', {
-			headers: { 'Authorization': `Basic ${encodedString}` },
+		const response = await snipcart.get('/orders');
+		logger.info('Successfuly received orders');
+
+		const orders = response.data.items.map(order => {
+			const filtered = order.items.filter(item => {
+				let supplier_id;
+				if (item.metadata && typeof item.metadata === 'object') {
+					supplier_id = item.metadata.supplier_id;
+
+				// Temporary as I entered some test data that was imperfect and dont know how to delete
+				} else {
+					try {
+						const substring = item.metadata.substring(1, item.metadata.length - 1);
+						supplier_id = JSON.parse(substring).supplier_id;
+					} catch (e) {
+						// TODO: if for some reason an item doesnt have a supplier id.... 
+						// This is bad, this should never theoretically happen.
+						supplier_id = null;
+					}
+				}
+				return requestedSupplierId == supplier_id;
+			});
+
+			return {
+				...order,
+				items: filtered,
+			}
 		});
 
-		logger.info('Successfuly received orders');
+		const orders_filtered = orders.filter(order => order.items.length > 0);
+
 
 		res.status(200).json({
 			"success": true,
-			"data": response.data,
+			"data": {
+				...response.data,
+				items: orders_filtered
+			},
 		});
-	} catch (error) {
 
+	} catch (error) {
 		logger.error(`Error goinng to get supplier information for supplier:`, error);
 
 		res.status(400).json({

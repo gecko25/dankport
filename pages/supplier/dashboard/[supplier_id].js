@@ -2,7 +2,7 @@ import React from 'react'
 import moment from 'moment';
 import axios from 'axios';
 import { useState } from 'react';
-import { useRouter } from 'next/router'
+import { withRouter, RouterProps as router } from 'next/router'
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 
@@ -23,14 +23,24 @@ const Supplier = ({
 	firstName,
 	id,
 	orders,
+	router,
 }) => {
 	const [order, setOrder] = useState({
 		user: {},
 		shippingAddress: {}
 	});
+
+	// Hooks
 	const handleOrder = (order) => setOrder(order)
 	const [show, setShow] = useState(false);
-	const handleClose = () => setShow(false);
+	const handleClose = (args = {}) => {
+		const { refreshData } = args;
+		if (refreshData) {
+			console.error('Refreshing data', router.pathname);
+			router.push(router.pathname);
+		}
+		setShow(false)
+	};
 	const handleShow = () => setShow(true);
 	const openModal = (order) => {
 		setOrder(order);
@@ -109,7 +119,7 @@ const Supplier = ({
 
 						{
 							!order.trackingNumber &&
-								<TrackingUrlForm token={order.token} />
+								<TrackingUrlForm token={order.token} handleClose={handleClose} />
 						}
 					</div>
 
@@ -154,4 +164,4 @@ Supplier.defaultProps = {
 
 };
 
-export default Supplier;
+export default withRouter(Supplier);

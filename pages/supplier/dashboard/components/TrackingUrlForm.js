@@ -19,22 +19,7 @@ const ValidationSchema = Yup.object().shape({
     .required('Required'),
 });
 
-const onSubmit = async (values, actions) => {
-	try {
-		logger.info('Submitting values..', values);
-		const response = await axios.put(`/api/orders`, {
-			...values,
-		});
-		logger.info(response);
-		actions.setSubmitting(false);
-	} catch (error) {
-		logger.error(error);
-		actions.setSubmitting(false);
-	}
-
-}
-
-const TrackingUrlForm = ({ token }) => (
+const TrackingUrlForm = ({ token, handleClose }) => (
 	<Formik
 		initialValues={{
 			token,
@@ -43,7 +28,19 @@ const TrackingUrlForm = ({ token }) => (
 			tracking_url: 'https://www.fedex.com/apps/fedextrack/?action=track&tracknumbers=784161861250&language=en&opco=FDEG&clientype=ivother',
 		}}
 		validationSchema={ValidationSchema}
-		onSubmit={onSubmit}
+		onSubmit={async (values, actions) => {
+			try {
+				logger.info('Submitting values..', values);
+				const response = await axios.put(`/api/orders`, {
+					...values,
+				});
+				handleClose({ refreshData: true });
+				actions.setSubmitting(false);
+			} catch (error) {
+				logger.error(error);
+				actions.setSubmitting(false);
+			}
+		}}
 		render={({ errors, status, touched, isSubmitting }) => (
 			<Form>
 				<Field
@@ -77,7 +74,9 @@ const TrackingUrlForm = ({ token }) => (
 					disabled={isSubmitting}
 					variant="primary"
 				>
-					Save Changes
+					{
+						isSubmitting ? <span>Submitting</span> : <span>Save Changes</span>
+					}
 				</Button>
 			</Form>
 		)}

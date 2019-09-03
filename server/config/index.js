@@ -1,5 +1,5 @@
 exports.env = require('./env');
 exports.logger = require('./logger');
-exports.hooks = require('./hooks');
+exports.transporter = require('./transporter');
 
 // exports.mongoose = require('./mongoose');
