@@ -36,8 +36,8 @@ const Supplier = ({
 	const handleClose = (args = {}) => {
 		const { refreshData } = args;
 		if (refreshData) {
-			console.error('Refreshing data', router.pathname);
-			router.push(router.pathname);
+			console.error('Refreshing data', router.asPath);
+			router.push(router.asPath);
 		}
 		setShow(false)
 	};
@@ -46,6 +46,8 @@ const Supplier = ({
 		setOrder(order);
 		handleShow();
 	}
+
+	const supplierId = router.query.supplier_id;
 
 	return (
 		<div>
@@ -62,31 +64,46 @@ const Supplier = ({
 			</ul>
 
 			{/* use react table */
-				orders.map(order => (
-					<ul className="Row" key={order.invoiceNumber}>
-						<li className="Column One">{moment(order.completionDate).format('ll')}</li>
-						<li className="Column Two">{order.status}</li>
-						<li className="Column Three">{order.invoiceNumber}</li>
-						<li className="Column Four">{order.token}</li>
-						<li className="Column Five">
-							{
-								order.trackingNumber ?
-									<Button
-										variant="secondary"
-										onClick={openModal.bind(null, order)}>
-											View tracking information
-									</Button>
-									:
-									<Button
-										className=""
-										variant="primary"
-										onClick={openModal.bind(null, order)}>
-											Add tracking information
-									</Button>
-							}
-						</li>
-					</ul>
-				))
+				orders.map(order => {
+					// We have to reset this value.
+					// Its possible that another supplier from the same order has already shipped.
+					// In the eyes of snipcart, this means the entire order has shipped.
+					// We need to double check with metadata that we have set ourselves to be sure of the true status.
+					// If no metadata exists, we can assume nothing has happened since purchase and the order,
+					// does in fact, have a the status 'Processed'.
+					order.status = 'Processed';
+
+
+					if (order.metadata.orderSortedBySupplier && order.metadata.orderSortedBySupplier[supplierId]) {
+						order.status = order.metadata.orderSortedBySupplier[supplierId].status;
+					}
+
+					return (
+						<ul className="Row" key={order.invoiceNumber}>
+							<li className="Column One">{moment(order.completionDate).format('ll')}</li>
+							<li className="Column Two">{order.status}</li>
+							<li className="Column Three">{order.invoiceNumber}</li>
+							<li className="Column Four">{order.token}</li>
+							<li className="Column Five">
+								{
+									order.status === 'Shipped' ?
+										<Button
+											variant="secondary"
+											onClick={openModal.bind(null, order)}>
+												View tracking information
+										</Button>
+										:
+										<Button
+											className=""
+											variant="primary"
+											onClick={openModal.bind(null, order)}>
+												Add tracking information
+										</Button>
+								}
+							</li>
+						</ul>
+					);
+				})
 			}
 
 			<Modal show={show} onHide={handleClose}>
@@ -97,11 +114,11 @@ const Supplier = ({
 				</Modal.Header>
 				<Modal.Body>
 					{
-						order.trackingNumber &&
+						order.status === 'Shipped' &&
 						<div>
-							<div>Tracking number: {order.trackingNumber}</div>
-							<div>Tracking url: {order.trackingUrl}</div>
-							<div>Shipping carrier: {order.metadata.shippingCarrier}</div>
+							<div>Tracking number: {order.metadata.orderSortedBySupplier[supplierId].trackingNumber}</div>
+							<div>Tracking url: {order.metadata.orderSortedBySupplier[supplierId].trackingUrl}</div>
+							<div>Shipping carrier: {order.metadata.orderSortedBySupplier[supplierId].metadata.shippingCarrier}</div>
 						</div>
 					}
 
@@ -118,9 +135,14 @@ const Supplier = ({
 
 
 						{
-							!order.trackingNumber &&
-								<TrackingUrlForm token={order.token} handleClose={handleClose} />
+							order.status !== 'Shipped' &&
+								<TrackingUrlForm
+									supplierId={supplierId}
+									order={order}
+									handleClose={handleClose}
+								/>
 						}
+
 					</div>
 
 					<Button variant="secondary" onClick={handleClose}>

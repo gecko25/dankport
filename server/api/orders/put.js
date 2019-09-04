@@ -2,14 +2,15 @@ const snipcart = require('../snipcart');
 const config = require('../../config');
 const { logger } = config;
 
-const getOrders = async function getOrders(req, res) {
+const putOrders = async function putOrders(req, res) {
 	logger.info(`Going to update tracking information`);
 
 	const {
 		tracking_number,
 		tracking_url,
 		shipping_carrier,
-		token,
+		supplier_id,
+		order,
 	} = req.body;
 
 	const data = {
@@ -17,14 +18,24 @@ const getOrders = async function getOrders(req, res) {
 		trackingNumber: tracking_number,
 		trackingUrl: tracking_url,
 		metaData: {
-			shippingCarrier: shipping_carrier,
+			orderSortedBySupplier: {
+				...order.metadata.orderSortedBySupplier,
+				[supplier_id]: {
+					trackingNumber: tracking_number,
+					trackingUrl: tracking_url,
+					shippingCarrier: shipping_carrier,
+					status: 'Shipped',
+					items: order.items,
+				},
+			}
 		}
 	};
 
-	logger.info(`Going update order as shipped: PUT https://app.snipcart.com/api/orders/${token}`);
+	logger.info(`Going update order as shipped: PUT https://app.snipcart.com/api/orders/${order.token}`);
+
 
 	try {
-		const response = await snipcart.put(`/orders/${token}`, data);
+		const response = await snipcart.put(`/orders/${order.token}`, data);
 		logger.info('Successfuly updated order');
 
 		res.status(200).json({
@@ -41,4 +52,4 @@ const getOrders = async function getOrders(req, res) {
 	}
 };
 
-module.exports = getOrders;
+module.exports = putOrders;

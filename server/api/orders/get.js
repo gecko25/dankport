@@ -1,10 +1,11 @@
 const snipcart = require('../snipcart');
 const config = require('../../config');
-const { logger, transporter } = config;
+const { logger } = config;
+const { getSupplierId } = require('../../helpers');
 
 const getOrders = async function getOrders(req, res) {
 	logger.info(`Going to get supplier information for supplier: |${req.query.supplier_id}`);
-	const requestedSupplierId = req.query.supplier_id;
+	const requested_supplier_id = req.query.supplier_id;
 
 	try {
 		const response = await snipcart.get('/orders');
@@ -12,38 +13,22 @@ const getOrders = async function getOrders(req, res) {
 
 		const orders = response.data.items.map(order => {
 			const filtered = order.items.filter(item => {
-				let supplier_id;
-				if (item.metadata && typeof item.metadata === 'object') {
-					supplier_id = item.metadata.supplier_id;
-
-				// Temporary as I entered some test data that was imperfect and dont know how to delete
-				} else {
-					try {
-						const substring = item.metadata.substring(1, item.metadata.length - 1);
-						supplier_id = JSON.parse(substring).supplier_id;
-					} catch (e) {
-						// TODO: if for some reason an item doesnt have a supplier id.... 
-						// This is bad, this should never theoretically happen.
-						supplier_id = null;
-					}
-				}
-				return requestedSupplierId == supplier_id;
+				const supplier_id_on_order = getSupplierId(item.metadata)
+				return requested_supplier_id == supplier_id_on_order;
 			});
 
 			return {
 				...order,
 				items: filtered,
 			}
-		});
-
-		const orders_filtered = orders.filter(order => order.items.length > 0);
+		}).filter(order => order.items.length > 0);
 
 
 		res.status(200).json({
 			"success": true,
 			"data": {
 				...response.data,
-				items: orders_filtered
+				items: orders,
 			},
 		});
 

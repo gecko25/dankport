@@ -19,10 +19,11 @@ const ValidationSchema = Yup.object().shape({
     .required('Required'),
 });
 
-const TrackingUrlForm = ({ token, handleClose }) => (
+const TrackingUrlForm = ({ order, supplierId, handleClose }) => (
 	<Formik
 		initialValues={{
-			token,
+			order,
+			supplier_id: supplierId,
 			tracking_number: '784161861250',
 			shipping_carrier: 'Fed ex',
 			tracking_url: 'https://www.fedex.com/apps/fedextrack/?action=track&tracknumbers=784161861250&language=en&opco=FDEG&clientype=ivother',

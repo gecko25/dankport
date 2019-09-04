@@ -4,6 +4,8 @@ const config = require('../config');
 const database = require('../mock-database');
 const { logger, env, transporter } = config;
 const snipcart = require('./snipcart');
+const { getSupplierId } = require('../helpers');
+
 /*
  * This module is solely responsible for sending out emails.
  *
@@ -24,8 +26,14 @@ module.exports = async (req, res) => {
 		let success = false;
 		let status = 200;
 
-		const eventName = req.body.eventName;
-		const { token, metadata } = req.body.content;
+		const {
+			shippingAddress,
+			eventName,
+			invoiceNumber,
+		} = req.body;
+
+
+		const { token, metadata, items } = req.body.content;
 		const { SNIPCART_API_KEY } = env;
 		const encodedString = base64.encode(`${SNIPCART_API_KEY}`);
 
@@ -42,27 +50,23 @@ module.exports = async (req, res) => {
 
 				// Todo: send out email programmatically here.
 				// Snipcart will not handle communication with suppliers, just our customers.
-				const supplierEmail = database.suppliers[metadata.supplier_id];
 
-				/* ******** UNCOMMENT ONCE ACCOUNT IS ACTIVATED **********
-				
-				// send mail with defined transport object
-				let info = await transporter.sendMail({
-						from: '"Fred Foo 👻" <foo@example.com>', // sender address
-						to: 'saradankport@gmail.com, baz@example.com', // list of receivers
-						subject: 'Hello ✔', // Subject line
-						text: 'Hello world?', // plain text body
-						html: '<b>Hello world?</b>' // html body
-				});
+				const supplierEmail = database.suppliers[getSupplierId(metadata)].email;
+				logger.info(`Order placed, notifying the supplier ${supplierEmail}`);
 
-				console.log('Message sent: %s', info.messageId);
-				// Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
+				try {
+					let info = await transporter.sendMail({
+							from: "Sara 👻", // sender address
+							to: supplierEmail, // list of receivers
+							subject: 'An order has been placed ✔', // Subject line
+							html: '<b>Someone has made a order. Please ship as soon as possible!</b>' // html body
+					});
+					logger.info('Message sent: %s', info.messageId);
+					// Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
 
-				// Preview only available when sending through an Ethereal account
-				console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
-				// Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
-
-				******** UNCOMMENT ONCE ACCOUNT IS ACTIVATED **********/
+				} catch (error) {
+					logger.info(error);
+				}
 
 		    break;
 
