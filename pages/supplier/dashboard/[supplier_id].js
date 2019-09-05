@@ -160,7 +160,7 @@ Supplier.getInitialProps = async function getInitialProps({ query, req }) {
 	const { supplier_id } = query;
 	const baseUrl = absoluteUrl(req, 'localhost:3000');
 	try {
-		logger.info(`Going to get orders for supplier_id: ${baseUrl}api/orders?supplier_id=${supplier_id}`);
+		logger.info(`Going to get orders: ${baseUrl}api/orders?supplier_id=${supplier_id}`);
 		const response = await axios.get(`${baseUrl}api/orders?supplier_id=${supplier_id}`);
 		const orders = response.data.data.items;
 

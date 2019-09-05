@@ -4,7 +4,7 @@ const { logger } = config;
 const { getSupplierId } = require('../../helpers');
 
 const getOrders = async function getOrders(req, res) {
-	logger.info(`Going to get supplier information for supplier: |${req.query.supplier_id}`);
+	logger.info(`Going to get supplier information for supplier: ${req.query.supplier_id}`);
 	const requested_supplier_id = req.query.supplier_id;
 
 	try {

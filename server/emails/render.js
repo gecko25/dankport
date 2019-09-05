@@ -35,7 +35,6 @@ hbs.registerHelper('date', function(date) {
 
 hbs.registerHelper('money', function(value) {
 		const formatted = Number(value).toFixed(2);
-		console.log('formatted === NaN', formatted === 'NaN');
 		if (formatted === 'NaN') {
 			return '$0.00';
 		}

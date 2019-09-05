@@ -24,8 +24,7 @@ const { renderEmail } = require('../emails');
  */
 
 module.exports = async (req, res) => {
-		let success = false;
-		let status = 200;
+		let success = true;
 
 		const {
 			shippingAddress,
@@ -34,25 +33,17 @@ module.exports = async (req, res) => {
 		} = req.body;
 
 		const { token, metadata, items } = req.body.content;
-		const { SNIPCART_API_KEY } = env;
-		const encodedString = base64.encode(`${SNIPCART_API_KEY}`);
-
 		logger.info(`Registering hook event: ${eventName}`);
 		logger.info(`Registering token event: ${token}`);
 
 		switch(eventName) {
-			// We have just received the order.
-			// A confirmation email is automatically sent to the customer
-			// We need to send an email to the suppler
 		  case "order.completed":
 		    logger.info('--- ORDER COMPLETED ---');
-				success = true;
-
 				// Send out email to suppliers.
 				// Snipcart will not handle communication with suppliers, just our customers.
 				const itemsSortedBySupplier = sortItemsBySupplier(items);
 				const suppliers = Object.keys(itemsSortedBySupplier);
-				// sort order items by supplier
+
 				for (let i=0; i<suppliers.length; i++) {
 					const supplierId = suppliers[i];
 					logger.info('Order placed, going to get email for supplier id:', supplierId);
@@ -81,11 +72,13 @@ module.exports = async (req, res) => {
 							logger.info('Message sent: %s', info.messageId);
 						} catch (error) {
 							logger.info(error);
+							success = false;
 						}
 
 					} catch (error) {
 						// TODO: setup errors@dankport.com (?)
 						logger.error(`Unable to send confirmation email to: ${supplierEmail}`, error);
+						success = false;
 					}
 				}
 		    break;
@@ -103,39 +96,22 @@ module.exports = async (req, res) => {
 				};
 
 				try {
-					// const response = await axios.post(`https://app.snipcart.com/api/orders/${token}/notifications`,
-					// 	data,
-					// 	{ headers: { 'Authorization': `Basic ${encodedString}` }},
-					// );
-
 					const response = await snipcart.post(`/orders/${token}/notifications`, data);
-
-
-					logger.info("Successfully sent tracking number email", response.data)
-					res.status(200).json({
-						"success": true,
-						"data": response.data,
-					});
+					logger.info("Successfully sent tracking number email", response.data.id)
 				} catch (error) {
-
 					logger.error(`Error sending tracking number confirmation email:`, error);
-
-					res.status(400).json({
-						"success": false,
-						"data": {},
-					});
+					success = false;
 				}
-
 				break;
 
 		  default:
 				logger.info('--- UNKNOWN HOOK ---');
 				success = false;
-				status = 400;
 		}
 
+		status = success ? 200 : 400;
 		res.status(status).json({
-			"success": success,
-			"response": req.body,
+			success,
+			response: req.body,
 		});
 }
