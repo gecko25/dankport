@@ -28,13 +28,14 @@ export const getSupplierId = (metadata) => {
  * Return a hashed index of items based on suppler id --> {	1: [{}, {}], 2: [{}] }
  */
 export const sortItemsBySupplier = (items) => {
+	const itemsSortedBySupplier = {};
 	for (let i=0; i<items.length; i++) {
 		const metadata = items[i].metadata;
 		const supplierId = getSupplierId(metadata);
 		if (itemsSortedBySupplier[supplierId]) {
-			itemsSortedBySupplier[supplierId] = [...itemsSortedBySupplier[supplierId], items[i]]
+			itemsSortedBySupplier[supplierId] = [ ...itemsSortedBySupplier[supplierId], items[i] ]
 		} else {
-			itemsSortedBySupplier[supplierId] = items[i];
+			itemsSortedBySupplier[supplierId] = [items[i]];
 		}
 	}
 

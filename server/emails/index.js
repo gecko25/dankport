@@ -1,0 +1,1 @@
+exports.renderEmail = require('./render');

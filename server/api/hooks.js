@@ -5,7 +5,7 @@ const database = require('../mock-database');
 const { logger, env, transporter } = config;
 const snipcart = require('./snipcart');
 const { getSupplierId, sortItemsBySupplier } = require('../helpers');
-const { notifySupplier }= require('../email-templates');
+const { renderEmail } = require('../emails');
 
 /*
  * This module is solely responsible for sending out emails.
@@ -52,40 +52,41 @@ module.exports = async (req, res) => {
 				// Snipcart will not handle communication with suppliers, just our customers.
 				const itemsSortedBySupplier = sortItemsBySupplier(items);
 				const suppliers = Object.keys(itemsSortedBySupplier);
-
 				// sort order items by supplier
 				for (let i=0; i<suppliers.length; i++) {
 					const supplierId = suppliers[i];
-					logger.info('Order placed, going to get email of supplier', metadata);
+					logger.info('Order placed, going to get email for supplier id:', supplierId);
 					const supplierEmail = database.suppliers[supplierId].email;
 
 					logger.info(`Received the suppliers email ${supplierEmail}`);
-					logger.info(itemsOnOrder);
-
-
 					logger.info('Formulating email with information on order.');
 					const data = {
-						...req.body.content,
-						items: itemsSortedBySupplier[supplierId],
+						order: {
+							...req.body.content,
+							items: itemsSortedBySupplier[supplierId],
+						},
+						context: 'Email',
 					}
-					const html = notifySupplier(data);
-
 
 					logger.info('Going to send email.')
 					try {
-						let info = await transporter.sendMail({
-								from: "Sara 👻", // sender address
-								to: supplierEmail, // list of receivers
-								subject: 'An order has been placed ✔', // Subject line
-								html: html // html body
-						});
-						logger.info('Message sent: %s', info.messageId);
-						// Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
+						const html = await renderEmail('notify-supplier.hbs', data);
+						try {
+							let info = await transporter.sendMail({
+									from: "Sara 👻", // sender address
+									to: supplierEmail, // list of receivers
+									subject: 'An order has been placed ✔', // Subject line
+									html: html // html body
+							});
+							logger.info('Message sent: %s', info.messageId);
+						} catch (error) {
+							logger.info(error);
+						}
 
 					} catch (error) {
-						logger.info(error);
+						// TODO: setup errors@dankport.com (?)
+						logger.error(`Unable to send confirmation email to: ${supplierEmail}`)
 					}
-
 				}
 		    break;
 

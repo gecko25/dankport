@@ -41,6 +41,15 @@ Shop.getInitialProps = async ({ req }) => {
 				image: 'https://img.huffingtonpost.com/asset/5c4b5be43b00001402689333.png?ops=scalefit_960_noupscale&format=webp',
 				supplierId: 2,
 			},
+			{
+				id: 3,
+				name: 'Peachy Pau Hana',
+				price: 39.99,
+				url: 'https://vermafarms.com/collections/frontpage/products/peachy-pau-hana',
+				description: 'Tastes like a Maui peach smoothie. These all-natural CBD gummies are filled with juicy peach punch, then dusted in sweet & sour sugar crystals for a mouthwatering taste sensation. If you love sour peaches, you\'ll be totally smitten with these Maui peach rings.',
+				image: 'https://cdn.shopify.com/s/files/1/0167/4415/3152/products/Gummies_500mg_PeachyPauHana_360x.png',
+				supplierId: 2,
+			},
 		]
 	}
 }
