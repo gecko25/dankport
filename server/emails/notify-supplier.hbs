@@ -6,7 +6,8 @@
                     {{! The `context` variable can be used to show information depending on the context the template is used for. It can be Email, Pdf or Html.}}
                     {{#if_eq context 'Email'}}
                     <p style="margin: 0 0 10px;">
-                        Success! Your order has been placed.
+                        Success! An order in your store has been placed.
+												Please ship as soon as possible!
                     </p>
 
                     {{! When a refund is passed to the template it means that the email will be sent after a refund has been issued.}}
@@ -46,6 +47,7 @@
                         </tr>
                     </table>
 
+										<!--  BUSINESS INFORMATION TABLE -->
                     <table width="100%" cellpadding="5" id="business" style="border-bottom: solid 1px #333">
                         <tr>
                             <td width="50%" valign="top">
@@ -96,6 +98,8 @@
                             {{/if}}
                         </tr>
                     </table>
+									  <!--  BUSINESS INFORMATION TABLE -->
+
                     <table width="100%" cellpadding="5" cellspacing="0" style="border-bottom: solid 1px #333">
                         <tr>
                             <td width="50%" valign="top">

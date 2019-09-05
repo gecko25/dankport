@@ -16,7 +16,12 @@
 		},
 		{
 			"src": "server/api/hooks.js",
-			"use": "@now/node"
+			"use": "@now/node",
+			"config": {
+        "includeFiles": [
+          "server/emails/**"
+        ]
+      }
 		},
     {
       "src": "next.config.js",

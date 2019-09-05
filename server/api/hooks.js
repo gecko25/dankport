@@ -68,7 +68,7 @@ module.exports = async (req, res) => {
 						context: 'Email',
 					}
 
-					logger.info('Going to send email.')
+					logger.info(`Going to send email to supplier ${supplierId} at ${supplierEmail}`);
 					try {
 						const html = await renderEmail('notify-supplier.hbs', data);
 						try {
@@ -85,7 +85,7 @@ module.exports = async (req, res) => {
 
 					} catch (error) {
 						// TODO: setup errors@dankport.com (?)
-						logger.error(`Unable to send confirmation email to: ${supplierEmail}`)
+						logger.error(`Unable to send confirmation email to: ${supplierEmail}`, error);
 					}
 				}
 		    break;
