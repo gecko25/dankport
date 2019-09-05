@@ -1,3 +1,7 @@
+/*
+ * Extract the supplier id from the metadata
+ * Parse a string into json, or read the object
+ */
 export const getSupplierId = (metadata) => {
 	let supplier_id = null;
 	if (metadata && typeof metadata === 'object') {
@@ -16,4 +20,23 @@ export const getSupplierId = (metadata) => {
 	}
 
 	return supplier_id;
+}
+
+
+/*
+ * Given a an array of item objects [{}, {}]
+ * Return a hashed index of items based on suppler id --> {	1: [{}, {}], 2: [{}] }
+ */
+export const sortItemsBySupplier = (items) => {
+	for (let i=0; i<items.length; i++) {
+		const metadata = items[i].metadata;
+		const supplierId = getSupplierId(metadata);
+		if (itemsSortedBySupplier[supplierId]) {
+			itemsSortedBySupplier[supplierId] = [...itemsSortedBySupplier[supplierId], items[i]]
+		} else {
+			itemsSortedBySupplier[supplierId] = items[i];
+		}
+	}
+
+	return itemsSortedBySupplier;
 }

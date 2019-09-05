@@ -4,7 +4,8 @@ const config = require('../config');
 const database = require('../mock-database');
 const { logger, env, transporter } = config;
 const snipcart = require('./snipcart');
-const { getSupplierId } = require('../helpers');
+const { getSupplierId, sortItemsBySupplier } = require('../helpers');
+const { notifySupplier }= require('../email-templates');
 
 /*
  * This module is solely responsible for sending out emails.
@@ -32,7 +33,6 @@ module.exports = async (req, res) => {
 			invoiceNumber,
 		} = req.body;
 
-
 		const { token, metadata, items } = req.body.content;
 		const { SNIPCART_API_KEY } = env;
 		const encodedString = base64.encode(`${SNIPCART_API_KEY}`);
@@ -48,26 +48,45 @@ module.exports = async (req, res) => {
 		    logger.info('--- ORDER COMPLETED ---');
 				success = true;
 
-				// Todo: send out email programmatically here.
+				// Send out email to suppliers.
 				// Snipcart will not handle communication with suppliers, just our customers.
+				const itemsSortedBySupplier = sortItemsBySupplier(items);
+				const suppliers = Object.keys(itemsSortedBySupplier);
 
-				const supplierEmail = database.suppliers[getSupplierId(metadata)].email;
-				logger.info(`Order placed, notifying the supplier ${supplierEmail}`);
+				// sort order items by supplier
+				for (let i=0; i<suppliers.length; i++) {
+					const supplierId = suppliers[i];
+					logger.info('Order placed, going to get email of supplier', metadata);
+					const supplierEmail = database.suppliers[supplierId].email;
 
-				try {
-					let info = await transporter.sendMail({
-							from: "Sara 👻", // sender address
-							to: supplierEmail, // list of receivers
-							subject: 'An order has been placed ✔', // Subject line
-							html: '<b>Someone has made a order. Please ship as soon as possible!</b>' // html body
-					});
-					logger.info('Message sent: %s', info.messageId);
-					// Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
+					logger.info(`Received the suppliers email ${supplierEmail}`);
+					logger.info(itemsOnOrder);
 
-				} catch (error) {
-					logger.info(error);
+
+					logger.info('Formulating email with information on order.');
+					const data = {
+						...req.body.content,
+						items: itemsSortedBySupplier[supplierId],
+					}
+					const html = notifySupplier(data);
+
+
+					logger.info('Going to send email.')
+					try {
+						let info = await transporter.sendMail({
+								from: "Sara 👻", // sender address
+								to: supplierEmail, // list of receivers
+								subject: 'An order has been placed ✔', // Subject line
+								html: html // html body
+						});
+						logger.info('Message sent: %s', info.messageId);
+						// Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
+
+					} catch (error) {
+						logger.info(error);
+					}
+
 				}
-
 		    break;
 
 			// The tracking number was changed.
